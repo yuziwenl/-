@@ -57,7 +57,17 @@ export default {
   },
   methods: {
     login () {
-      this.$refs.loginForm.validate()
+      this.$refs.loginForm.validate(isOK => {
+        if (isOK) {
+          this.$axios({
+            methods: 'post',
+            url: '/authorizations',
+            data: this.formData
+          }).then(result => {
+            console.log(result.data.data)
+          })
+        }
+      })
     }
   }
 }
