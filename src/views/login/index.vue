@@ -60,11 +60,13 @@ export default {
       this.$refs.loginForm.validate(isOK => {
         if (isOK) {
           this.$axios({
-            methods: 'post',
+            method: 'post',
             url: '/authorizations',
             data: this.formData
           }).then(result => {
-            console.log(result.data.data)
+            // console.log(result.data.data)
+            window.localStorage.setItem('user-info', JSON.stringify(result.data.data))
+            this.$router.push('/home')
           })
         }
       })
