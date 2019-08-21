@@ -38,7 +38,7 @@ export default {
       this.$axios({
         url: '/user/profile'
       }).then(result => {
-        this.user = result.data.data
+        this.user = result.data
       })
     },
     commandAction (command) {

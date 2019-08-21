@@ -9,7 +9,7 @@
       active-text-color="#ffd04b"
       :router='true'>
 <el-menu-item index='/home'>首页</el-menu-item>
-<el-submenu>
+<el-submenu index='1'>
   <template slot='title'>
       <span >内容管理</span>
   </template>
@@ -18,7 +18,7 @@
   <el-menu-item index='/home/material'>素材管理</el-menu-item>
   <el-menu-item index='/home/comment'>评论列表</el-menu-item>
 </el-submenu>
-<el-submenu>
+<el-submenu index='fans'>
    <template slot='title'>
       <span >粉丝管理</span>
   </template>
