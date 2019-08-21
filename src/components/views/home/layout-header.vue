@@ -35,15 +35,11 @@ export default {
   },
   methods: {
     getUesrInfo () {
-      let userInfo = window.localStorage.getItem('user-info')
-      let token = userInfo ? JSON.parse(userInfo).token : null
-      token &&
-        this.$axios({
-          url: '/user/profile',
-          headers: { Authorization: `Bearer  ${token}` }
-        }).then(result => {
-          this.user = result.data.data
-        })
+      this.$axios({
+        url: '/user/profile'
+      }).then(result => {
+        this.user = result.data.data
+      })
     },
     commandAction (command) {
       if (command === 'account') {
