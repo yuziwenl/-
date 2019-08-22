@@ -18,6 +18,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-row type="flex" justify="center" style="marigin:20px 0">
+      <el-pagination
+        :page-size="page.pageSize"
+        :total="page.total"
+        :current-page="page.currentPage"
+        @current-change='changePage'
+        background
+        layout="prev, pager, next"
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -25,18 +35,31 @@
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      page: {
+        pageSize: 10,
+        total: 0,
+        currentPage: 1
+      }
     }
   },
   methods: {
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getComments()
+    },
     getComments () {
+      let pageParams = { page: this.page.currentPage,
+        per_page: this.page.pageSize }
       this.$axios({
         url: '/articles',
         params: {
-          response_type: 'comment'
+          response_type: 'comment',
+          ...pageParams
         }
       }).then(result => {
         this.list = result.data.results
+        this.page.total = result.data.total_count
       })
     },
     formatter (row, column, cellValue, index) {
