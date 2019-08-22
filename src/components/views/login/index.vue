@@ -65,13 +65,8 @@ export default {
             data: this.formData
           }).then(result => {
             // console.log(result.data.data)
-            window.localStorage.setItem('user-info', JSON.stringify(result.data.data))
+            window.localStorage.setItem('user-info', JSON.stringify(result.data))
             this.$router.push('/home')
-          }).catch(() => {
-            this.$message({
-              message: '当前用户名或者密码错误',
-              type: 'warning'
-            })
           })
         }
       })

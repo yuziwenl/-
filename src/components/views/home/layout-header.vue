@@ -7,7 +7,7 @@
     <el-col :span="3" style="display">
       <img
         style="width:40px;height:40px;border-radius:50%;margin-right:10px;align-items:center"
-        :src="!user.photo?user.photo:defaultImg"
+        :src="user.photo?user.photo:defaultImg"
         alt
       />
       <el-dropdown trigger="click" @command='commandAction'>
