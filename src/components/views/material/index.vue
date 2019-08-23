@@ -3,29 +3,46 @@
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
-    <el-tabs v-model="activeName" @tab-click='changeTab'>
+    <el-tabs v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部图片" name="all">
         <div class="img-list">
           <el-card class="img-card" v-for="item in list" :key="item.id">
             <img :src="item.url" alt />
-             <el-row align="middle" type="flex" justify="space-around" class="operate">
+            <el-row align="middle" type="flex" justify="space-around" class="operate">
               <i class="el-icon-star-off"></i>
               <i class="el-icon-delete"></i>
             </el-row>
           </el-card>
         </div>
+        <el-row type="flex" justify="center">
+          <el-pagination
+            :current-page="page.currentPage"
+            :page-size="page.pageSize"
+            :total="page.total"
+            @current-change="changePage"
+            background
+            layout="prev, pager, next"
+          ></el-pagination>
+        </el-row>
       </el-tab-pane>
       <el-tab-pane label="收藏图片" name="collect">
-
-         <div class="img-list">
+        <div class="img-list">
           <el-card class="img-card" v-for="item in list" :key="item.id">
             <img :src="item.url" alt />
-             <el-row align="middle" type="flex" justify="space-around" class="operate">
-            </el-row>
+            <el-row align="middle" type="flex" justify="space-around" class="operate"></el-row>
           </el-card>
         </div>
+        <el-row type="flex" justify="center">
+          <el-pagination
+            :current-page="page.currentPage"
+            :page-size="page.pageSize"
+            :total="page.total"
+            @current-change="changePage"
+            background
+            layout="prev, pager, next"
+          ></el-pagination>
+        </el-row>
       </el-tab-pane>
-
     </el-tabs>
   </el-card>
 </template>
@@ -34,19 +51,34 @@ export default {
   data () {
     return {
       activeName: 'all',
-      list: []
+      list: [],
+      page: {
+        currentPage: 1,
+        pageSize: 15,
+        total: 0
+      }
     }
   },
   methods: {
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getMaterial()
+    },
     changeTab () {
+      this.page.currentPage = 1
       this.getMaterial()
     },
     getMaterial () {
+      let pageParams = {
+        page: this.page.currentPage,
+        per_page: this.page.pageSize
+      }
       this.$axios({
         url: 'user/images',
-        params: { collect: this.activeName === 'collect' }
+        params: { collect: this.activeName === 'collect', ...pageParams }
       }).then(result => {
         this.list = result.data.results
+        this.page.total = result.data.total_count
       })
     }
   },
@@ -76,7 +108,7 @@ export default {
       left: 0;
       height: 30px;
       width: 100%;
-       background-color: #f4f5f6;
+      background-color: #f4f5f6;
       i {
         font-size: 24px;
       }
