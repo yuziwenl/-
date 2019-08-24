@@ -34,6 +34,27 @@
     </el-date-picker>
     </el-form-item>
   </el-form>
+  <div class="total_title">共找到56789条符合条件的内容</div>
+  <div class="content-list ">
+    <div class="content-item" v-for=" (item,index) in list" :key="index">
+      <div class="left">
+        <img src="../../../assets/img/404.png" alt="">
+        <div class="info">
+          <span>我是标题</span>
+          <el-tag style="width:60px;">标签</el-tag>
+          <span class="date">2019-08-22 17:39:22</span>
+        </div>
+      </div>
+      <div class="right">
+        <span>
+          <i class="el-icon-edit">修改 </i>
+        </span>
+          <span>
+          <i class="el-icon-delete">删除</i>
+        </span>
+      </div>
+    </div>
+  </div>
  </el-card>
 </template>
 
@@ -59,13 +80,56 @@ export default {
       }, {
         value: '选项5',
         label: '北京烤鸭'
-      }]
+      }],
+      list: [1, 2, 3, 4, 5]
     }
   }
 
 }
 </script>
 
-<style>
-
+<style lang='less' scoped>
+.total_title{
+  height:60px;
+  line-height: 60px;
+  border-bottom:1px dotted #ccc;
+}
+.content-list{
+  .content-item{
+    display: flex;
+    border-bottom: 1px solid #f2f3f5;
+    padding: 10px;
+    justify-content: space-between;
+    .left{
+      display: flex;
+      align-items:center;
+      img{
+        width: 150px;
+        height: 100px;
+        border-radius: 4px;
+      }
+      .info{
+        margin-left: 10px;
+        display: flex;
+        height: 100px;
+        padding:5px 0;
+        flex-direction: column;
+        justify-content: space-between;
+        .date{
+          color: #999;
+          font-size: 12px;
+        }
+      }
+    }
+    .right{
+      span,span i{
+        font-size:12px;
+        color:#333;
+      }
+      span{
+        margin-right:6px;
+      }
+    }
+  }
+}
 </style>
