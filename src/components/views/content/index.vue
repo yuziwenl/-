@@ -1,4 +1,5 @@
 <template>
+<!-- 上面 -->
  <el-card>
    <bread-crumb slot='header'>
    <template slot="title">
@@ -7,26 +8,29 @@
    </bread-crumb>
   <el-form style="margin-left:40px">
     <el-form-item label="文章状态">
-       <el-radio-group v-model="radio">
-    <el-radio :label="1">全部</el-radio>
-    <el-radio :label="2">草稿</el-radio>
-    <el-radio :label="3">待审核</el-radio>
-     <el-radio :label="4">审核成功</el-radio>
-      <el-radio :label="5">审核失败</el-radio>
+       <el-radio-group v-model="formData.status" @change='getChange'>
+    <el-radio :label="5">全部</el-radio>
+    <el-radio :label="0">草稿</el-radio>
+    <el-radio :label="1">待审核</el-radio>
+     <el-radio :label="2">审核成功</el-radio>
+      <el-radio :label="3">审核失败</el-radio>
   </el-radio-group>
     </el-form-item>
     <el-form-item label="频道列表">
-         <el-select v-model="value" placeholder="请选择">
+         <el-select v-model="value" placeholder="请选择" @change='getChange'>
     <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
+
+      v-for="item in channels"
+      :key="item.id"
+      :label="item.name"
+      :value="item.id">
     </el-option>
   </el-select>
     </el-form-item>
     <el-form-item label="时间选择">
         <el-date-picker
+         @change='getChange'
+        value-format='yyyy-MM-dd'
       v-model="value1"
       type="daterange"
       start-placeholder="开始日期"
@@ -34,6 +38,7 @@
     </el-date-picker>
     </el-form-item>
   </el-form>
+  <!-- 下面 -->
   <div class="total_title">共找到{{page.total}}条符合条件的内容</div>
   <div class="content-list ">
     <div class="content-item" v-for=" (item,index) in list" :key="index">
@@ -62,25 +67,13 @@
 export default {
   data () {
     return {
-      radio: 3,
-      value: '',
-      value1: '',
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
+      value: null,
+      value1: null,
+      formData: {
+        status: 5,
+        channel_id: null
+      },
+      channels: [],
       list: [],
       page: {
         total: 0
@@ -88,12 +81,34 @@ export default {
     }
   },
   methods: {
+    getChange () {
+      this.$axios({
+        url: '/articles',
+        params: {
+          status: this.formData.status === 5 ? null : this.formData.status,
+          channel_id: this.value,
+          begin_pubdate: this.value1 && this.value1.length ? this.value1[0] : null,
+          end_pubdate: this.value1 && this.value1.length > 1 ? this.value1[1] : null
+        }
+      }).then(result => {
+        this.list = result.data.results
+        this.page.total = result.data.total_count
+      })
+    },
     getArticles () {
       this.$axios({
         url: '/articles'
       }).then(result => {
         this.list = result.data.results
         this.page.total = result.data.total_count
+      })
+    },
+    getChannels () {
+      this.$axios({
+        url: '/channels'
+
+      }).then(result => {
+        this.channels = result.data.channels
       })
     }
   },
@@ -125,6 +140,7 @@ export default {
   },
   created () {
     this.getArticles()
+    this.getChannels()
   } }
 </script>
 
