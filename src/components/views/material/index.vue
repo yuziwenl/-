@@ -9,8 +9,8 @@
           <el-card class="img-card" v-for="item in list" :key="item.id">
             <img :src="item.url" alt />
             <el-row align="middle" type="flex" justify="space-around" class="operate">
-              <i class="el-icon-star-off"></i>
-              <i class="el-icon-delete"></i>
+              <i :style="{ color : item.is_collected ? 'red' : '' }"   class="el-icon-star-off" @click='collectOrCancel(item)'></i>
+              <i class="el-icon-delete" @click='delMatrial(item)'></i>
             </el-row>
           </el-card>
         </div>
@@ -60,6 +60,26 @@ export default {
     }
   },
   methods: {
+    collectOrCancel (item) {
+      let mess = item.is_collected ? '取消收藏' : '收藏'
+      this.$confirm(`你是否要${mess}此图片`, '提示').then(() => {
+        this.$axios({
+          method: 'put',
+          url: `user/images/${item.id}`,
+          data: { collect: !item.is_collected }
+        })
+      })
+    },
+    delMatrial (item) {
+      this.$confirm('你确定要删除此图片么？', '提示').then(() => {
+        this.$axios({
+          method: 'delete',
+          url: `user/images/${item.id}`
+        }).then(result => {
+          this.getMaterial()
+        })
+      })
+    },
     changePage (newPage) {
       this.page.currentPage = newPage
       this.getMaterial()
