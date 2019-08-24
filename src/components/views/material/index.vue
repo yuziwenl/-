@@ -3,6 +3,9 @@
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <el-upload class="upL" :http-request="uploadImg" action="" :show-file-list='false'>
+      <el-button type="primary">上传图片</el-button>
+    </el-upload>
     <el-tabs v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部图片" name="all">
         <div class="img-list">
@@ -60,6 +63,17 @@ export default {
     }
   },
   methods: {
+    uploadImg (params) {
+      let formData = new FormData()
+      formData.append('image', params.file)
+      this.$axios({
+        method: 'post',
+        url: '/user/images',
+        data: formData
+      }).then(result => {
+        this.getMaterial()
+      })
+    },
     collectOrCancel (item) {
       let mess = item.is_collected ? '取消收藏' : '收藏'
       this.$confirm(`你是否要${mess}此图片`, '提示').then(() => {
@@ -109,6 +123,11 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.upL{
+  position: absolute;
+  right: 20px;
+  margin-top:-10px;
+}
 .img-list {
   display: flex;
   justify-content: space-around;
