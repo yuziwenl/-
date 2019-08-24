@@ -5,7 +5,7 @@
      内容列表
    </template>
    </bread-crumb>
-  <el-form>
+  <el-form style="margin-left:40px">
     <el-form-item label="文章状态">
        <el-radio-group v-model="radio">
     <el-radio :label="1">全部</el-radio>
@@ -34,15 +34,15 @@
     </el-date-picker>
     </el-form-item>
   </el-form>
-  <div class="total_title">共找到56789条符合条件的内容</div>
+  <div class="total_title">共找到{{page.total}}条符合条件的内容</div>
   <div class="content-list ">
     <div class="content-item" v-for=" (item,index) in list" :key="index">
       <div class="left">
-        <img src="../../../assets/img/404.png" alt="">
+        <img :src="item.cover.images[0]" alt="">
         <div class="info">
-          <span>我是标题</span>
-          <el-tag style="width:60px;">标签</el-tag>
-          <span class="date">2019-08-22 17:39:22</span>
+          <span>{{item.title}}</span>
+          <el-tag style="width:60px;" :type="item.status|statusType">{{item.status |statusText }}</el-tag>
+          <span class="date">{{item.pubdate}}</span>
         </div>
       </div>
       <div class="right">
@@ -81,11 +81,51 @@ export default {
         value: '选项5',
         label: '北京烤鸭'
       }],
-      list: [1, 2, 3, 4, 5]
+      list: [],
+      page: {
+        total: 0
+      }
     }
-  }
-
-}
+  },
+  methods: {
+    getArticles () {
+      this.$axios({
+        url: '/articles'
+      }).then(result => {
+        this.list = result.data.results
+        this.page.total = result.data.total_count
+      })
+    }
+  },
+  filters: {
+    statusText (value) {
+      switch (value) {
+        case 0:
+          return '草稿'
+        case 2:
+          return '已发表'
+        case 3:
+          return '审核失败'
+        case 4:
+          return '已删除'
+      }
+    },
+    statusType (value) {
+      switch (value) {
+        case 0:
+          return 'warning'
+        case 2:
+          return 'success'
+        case 3:
+          return 'danger'
+        case 4:
+          return 'info'
+      }
+    }
+  },
+  created () {
+    this.getArticles()
+  } }
 </script>
 
 <style lang='less' scoped>
