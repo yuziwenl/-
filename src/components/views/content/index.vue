@@ -51,11 +51,11 @@
         </div>
       </div>
       <div class="right">
-        <span>
+        <span style='cursor:pointer'>
           <i class="el-icon-edit">修改 </i>
         </span>
-          <span>
-          <i class="el-icon-delete">删除</i>
+          <span style='cursor:pointer'>
+          <i class="el-icon-delete"  @click="delItem(item)" >删除</i>
         </span>
       </div>
     </div>
@@ -85,6 +85,16 @@ export default {
     }
   },
   methods: {
+    delItem (item) {
+      this.$confirm('你是否要删除').then(() => {
+        this.$axios({
+          methods: 'delete',
+          url: `/articles/${item.id.toString()}`
+        }).then(result => {
+          this.getArticles()
+        })
+      })
+    },
     // box () {
     //   let params = {
     //     status: this.formData.status === 5 ? null : this.formData.status,
