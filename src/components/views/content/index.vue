@@ -17,7 +17,7 @@
   </el-radio-group>
     </el-form-item>
     <el-form-item label="频道列表">
-         <el-select v-model="value" placeholder="请选择" @change='getChange'>
+         <el-select v-model="channel_id" placeholder="请选择" @change='getChange'>
     <el-option
 
       v-for="item in channels"
@@ -31,7 +31,7 @@
         <el-date-picker
          @change='getChange'
         value-format='yyyy-MM-dd'
-      v-model="value1"
+      v-model="dateChange"
       type="daterange"
       start-placeholder="开始日期"
       end-placeholder="结束日期">
@@ -60,6 +60,9 @@
       </div>
     </div>
   </div>
+  <el-row type="flex" justify="center" style='margin:20px 0'>
+      <el-pagination @current-change="changePage" :current-page="page.currentPage" :page-size="page.pageSize" background layout="prev, pager, next" :total="page.total"></el-pagination>
+    </el-row>
  </el-card>
 </template>
 
@@ -67,37 +70,72 @@
 export default {
   data () {
     return {
-      value: null,
-      value1: null,
+      channel_id: null,
+      dateChange: null,
       formData: {
-        status: 5,
-        channel_id: null
+        status: 5
       },
       channels: [],
       list: [],
       page: {
-        total: 0
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
       }
     }
   },
   methods: {
+    // box () {
+    //   let params = {
+    //     status: this.formData.status === 5 ? null : this.formData.status,
+    //     channel_id: this.value,
+    //     begin_pubdate: this.value1 && this.value1.length ? this.value1[0] : null,
+    //     end_pubdate: this.value1 && this.value1.length > 1 ? this.value1[1] : null,
+    //     page: this.page.currentPage,
+    //     per_page: this.page.pageSize
+    //   }
+    //   return params
+    // },
+    changePage (newpage) {
+      this.page.currentPage = newpage
+      // this.$axios({
+      //   url: '/articles',
+      //   params: {
+      //     status: this.formData.status === 5 ? null : this.formData.status,
+      //     channel_id: this.value,
+      //     begin_pubdate: this.value1 && this.value1.length ? this.value1[0] : null,
+      //     end_pubdate: this.value1 && this.value1.length > 1 ? this.value1[1] : null,
+      //     page: this.page.currentPage,
+      //     per_page: this.page.pageSize
+      //   }
+      // }).then(result => {
+      //   this.list = result.data.results
+      // })
+      this.getArticles()
+    },
     getChange () {
+      this.page.currentPage = 1
+      // this.$axios({
+      //   url: '/articles'
+
+      // }).then(result => {
+      //   this.list = result.data.results
+      //   this.page.total = result.data.total_count
+      // })
+      this.getArticles()
+    },
+    getArticles () {
       this.$axios({
         url: '/articles',
         params: {
           status: this.formData.status === 5 ? null : this.formData.status,
-          channel_id: this.value,
-          begin_pubdate: this.value1 && this.value1.length ? this.value1[0] : null,
-          end_pubdate: this.value1 && this.value1.length > 1 ? this.value1[1] : null
+          channel_id: this.channel_id,
+          begin_pubdate: this.dateChange && this.dateChange.length ? this.dateChange[0] : null,
+          end_pubdate: this.dateChange && this.dateChange.length > 1 ? this.dateChange[1] : null,
+          page: this.page.currentPage,
+          per_page: this.page.pageSize
         }
-      }).then(result => {
-        this.list = result.data.results
-        this.page.total = result.data.total_count
-      })
-    },
-    getArticles () {
-      this.$axios({
-        url: '/articles'
+
       }).then(result => {
         this.list = result.data.results
         this.page.total = result.data.total_count
@@ -106,7 +144,6 @@ export default {
     getChannels () {
       this.$axios({
         url: '/channels'
-
       }).then(result => {
         this.channels = result.data.channels
       })
