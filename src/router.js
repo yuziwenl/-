@@ -25,6 +25,10 @@ export default new Router({
       path: '/home/material',
       component: () =>
           import('./components/views/material')
+    }, {
+      path: '/home/content',
+      component: () =>
+          import('./components/views/content')
     }]
   }, {
     path: '/login',
