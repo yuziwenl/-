@@ -29,6 +29,10 @@ export default new Router({
       path: '/home/content',
       component: () =>
           import('./components/views/content')
+    }, {
+      path: '/home/publish',
+      component: () =>
+          import('./components/views/publish')
     }]
   }, {
     path: '/login',
