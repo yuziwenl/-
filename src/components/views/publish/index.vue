@@ -80,9 +80,19 @@ export default {
       }).then(result => {
         this.channels = result.data.channels
       })
+    },
+    getId () {
+      let{ articleId } = this.$route.params
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data
+      })
     }
   },
   created () {
+    let{ articleId } = this.$route.params
+    articleId && this.getId()
     this.getChannels()
   }
 }
