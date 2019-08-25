@@ -52,7 +52,7 @@
       </div>
       <div class="right">
         <span style='cursor:pointer'>
-          <i class="el-icon-edit">修改 </i>
+          <i class="el-icon-edit" @click="goEdit(item)">修改 </i>
         </span>
           <span style='cursor:pointer'>
           <i class="el-icon-delete"  @click="delItem(item)" >删除</i>
@@ -85,6 +85,9 @@ export default {
     }
   },
   methods: {
+    goEdit (item) {
+      this.$router.push(`/home/publish/${item.id.toString()}`)
+    },
     delItem (item) {
       this.$confirm('你是否要删除').then(() => {
         this.$axios({

@@ -33,6 +33,10 @@ export default new Router({
       path: '/home/publish',
       component: () =>
           import('./components/views/publish')
+    }, {
+      path: '/home/publish/:articleId',
+      component: () =>
+          import('./components/views/publish')
     }]
   }, {
     path: '/login',
