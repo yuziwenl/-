@@ -11,7 +11,7 @@
         <quill-editor v-model="formData.content" style="width:800px;height:400px;margin-bottom:100px" placeholder="请输入内容"></quill-editor>
       </el-form-item>
       <el-form-item label="封面">
-        <el-radio-group v-model="formData.cover.type">
+        <el-radio-group v-model="formData.cover.type" @change='changeType'>
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
@@ -60,6 +60,15 @@ export default {
     }
   },
   methods: {
+    changeType () {
+      if (this.formData.cover.type === 1) {
+        this.formData.cover.images = ['']
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', '']
+      } else {
+        this.formData.cover.images = []
+      }
+    },
     publish (draft) {
       this.$refs.myForm.validate((isOK) => {
         if (isOK) {
