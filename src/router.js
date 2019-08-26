@@ -42,6 +42,10 @@ export default new Router({
     path: '/login',
     name: 'login',
     component: Login
+  }, {
+    path: '/home/account',
+    component: () =>
+        import('./components/views/account')
   }
     // {
     //   path: '/about',

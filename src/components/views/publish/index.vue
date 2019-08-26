@@ -18,6 +18,9 @@
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form>
+        <cover-image @updateImages='updateImages' :images='formData.cover.images'></cover-image>
+      </el-form>
       <el-form-item label="频道" prop="channel_id">
         <el-select v-model="formData.channel_id">
           <el-option :label="item.name" :value="item.id" v-for="item in channels" :key="item.id"></el-option>
@@ -60,6 +63,11 @@ export default {
     }
   },
   methods: {
+    updateImages (url, index) {
+      this.formData.cover.images = this.formData.cover.images.map((item, i) => {
+        return i === index ? url : item
+      })
+    },
     changeType () {
       if (this.formData.cover.type === 1) {
         this.formData.cover.images = ['']
@@ -81,7 +89,7 @@ export default {
             params: { draft },
             data: this.formData
           }).then(() => {
-            this.$router.push('/home/articles')
+            this.$router.push('/home/content')
           })
         }
       })

@@ -91,7 +91,7 @@ export default {
     delItem (item) {
       this.$confirm('你是否要删除').then(() => {
         this.$axios({
-          methods: 'delete',
+          method: 'delete',
           url: `/articles/${item.id.toString()}`
         }).then(result => {
           this.getArticles()
