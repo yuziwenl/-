@@ -11,6 +11,11 @@ export default new Router({
     redirect: 'home'
   },
   {
+    path: '*',
+    component: () =>
+        import('./components/views/404.vue')
+  },
+  {
     path: '/home',
     name: 'home',
     component: Home,
