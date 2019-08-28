@@ -18,8 +18,8 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
-  router.afterEach(() => {
-    nprogress.done()
-  })
+})
+router.afterEach(() => {
+  nprogress.done()
 })
 export default router

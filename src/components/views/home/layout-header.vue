@@ -1,7 +1,7 @@
 <template>
   <el-row style="padding:12px 0" type="flex" justify="space-between">
     <el-col :span="18" style="display:flex;align-items:center">
-      <i style="font-size:20px;margin-right:4px" class="el-icon-s-unfold"></i>
+      <i style="font-size:20px;margin-right:4px" :class="currentClass" @click='openOrclose'></i>
       <span>江苏传智播客教育有限股份公司</span>
     </el-col>
     <el-col :span="3" style="display">
@@ -31,10 +31,15 @@ export default {
   data () {
     return {
       user: {},
+      currentClass: 'el-icon-s-fold',
       defaultImg: require('@/assets/img/avatar.jpg')
     }
   },
   methods: {
+    openOrclose () {
+      eventBus.$emit('collapseOrclose')
+      this.currentClass = this.currentClass === 'el-icon-s-fold' ? 'el-icon-s-unfold' : 'el-icon-s-fold'
+    },
     getUesrInfo () {
       this.$axios({
         url: '/user/profile'

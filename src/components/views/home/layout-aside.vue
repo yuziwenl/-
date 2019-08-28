@@ -1,12 +1,14 @@
 <template>
   <div class="layout-aside">
     <div class="title">
-      <img src="@/assets/img/logo_admin.png" alt="">
+      <img :src="collapse?smallImg:bigImg" :style="{width:collapse?'30px':'120px'}" alt="">
     </div>
     <el-menu
       background-color="#353b4e"
       text-color="#adafb5"
       active-text-color="#ffd04b"
+      :collapse="collapse"
+      :collapse-transition="false"
       :router='true'>
 <el-menu-item index='/home'>首页</el-menu-item>
 <el-submenu index='1'>
@@ -35,8 +37,20 @@
 </template>
 
 <script>
+import eventBus from '../../../utils/eventBus'
 export default {
-
+  data () {
+    return {
+      collapse: false,
+      bigImg: require('@/assets/img/logo_admin.png'),
+      smallImg: require('@/assets/img/toutiao.png')
+    }
+  },
+  created () {
+    eventBus.$on('collapseOrclose', () => {
+      this.collapse = !this.collapse
+    })
+  }
 }
 </script>
 

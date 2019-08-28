@@ -1,6 +1,6 @@
 <template>
 <el-container>
-  <el-aside style="width:200px;background-color:#323745;min-height:100vh">
+  <el-aside :style="{width}" style='background-color:#323745;min-height:100vh'>
     <layout-aside></layout-aside>
   </el-aside>
   <el-container>
@@ -15,9 +15,18 @@
 </template>
 
 <script>
-
+import eventBus from '../../../utils/eventBus'
 export default {
-
+  data () {
+    return {
+      width: '200px'
+    }
+  },
+  created () {
+    eventBus.$on('collapseOrclose', () => {
+      this.width = this.width === '200px' ? '60px' : '200px'
+    })
+  }
 }
 </script>
 <style lang="less" scoped>
